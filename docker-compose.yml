@@ -14,6 +14,9 @@ services:
       - FOUNDRY_PASSWORD=${FOUNDRY_PASSWORD}
       - FOUNDRY_USERNAME=${FOUNDRY_USERNAME}
       - FOUNDRY_ADMIN_KEY=${FOUNDRY_ADMIN_KEY}
+      - FOUNDRY_HOSTNAME=dnd.homecube.tradeserv.us
+      - FOUNDRY_PROXY_PORT=443
+      - FOUNDRY_PROXY_SSL=true
       # - CONTAINER_CACHE=/data/container_cache
       # - CONTAINER_CACHE_SIZE=
       # - CONTAINER_PATCHES=/data/container_patches
@@ -32,7 +35,7 @@ services:
       #   }
       # - FOUNDRY_COMPRESS_WEBSOCKET=true
       # - FOUNDRY_GID=foundry
-      # - FOUNDRY_HOSTNAME=
+
       # - FOUNDRY_HOT_RELOAD=false
       # - FOUNDRY_IP_DISCOVERY=
       # - FOUNDRY_LANGUAGE=
@@ -41,8 +44,6 @@ services:
       # - FOUNDRY_MINIFY_STATIC_FILES=
       # - FOUNDRY_PASSWORD_SALT=
       # - FOUNDRY_PROTOCOL=
-      # - FOUNDRY_PROXY_PORT=
-      # - FOUNDRY_PROXY_SSL=false
       # - FOUNDRY_RELEASE_URL=
       # - FOUNDRY_ROUTE_PREFIX=
       # - FOUNDRY_SSL_CERT=
@@ -59,3 +60,13 @@ services:
         published: 30000
         protocol: tcp
         mode: host
+  nginx-proxy-manager:
+    image: 'jc21/nginx-proxy-manager:latest'
+    restart: unless-stopped
+    ports:
+      - '80:80'
+      - '81:81'
+      - '443:443'
+    volumes:
+      - ./nginx-proxy-manager/data:/data
+      - ./nginx-proxy-manager/letsencrypt:/etc/letsencrypt
